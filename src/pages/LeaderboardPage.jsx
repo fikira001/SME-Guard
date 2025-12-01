@@ -39,35 +39,35 @@ export default function LeaderboardPage() {
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-8 min-h-[80vh]">
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-                <div className="p-8 bg-gradient-to-r from-slate-900 to-slate-800 text-white text-center">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors">
+                <div className="p-8 bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 text-white text-center">
                     <Trophy className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
                     <h1 className="text-3xl font-bold mb-2">Top Secure SMEs</h1>
                     <p className="text-slate-400">Recognizing businesses committed to cybersecurity in Nigeria.</p>
                 </div>
 
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-slate-100 dark:divide-slate-700">
                     {loading ? (
-                        <div className="p-8 text-center text-slate-500">Loading leaderboard...</div>
+                        <div className="p-8 text-center text-slate-500 dark:text-slate-400">Loading leaderboard...</div>
                     ) : (
                         leaders.map((leader, index) => (
-                            <div key={index} className={`flex items-center justify-between p-6 ${leader.name === userData?.name ? 'bg-green-50' : 'hover:bg-slate-50'}`}>
+                            <div key={index} className={`flex items-center justify-between p-6 transition-colors ${leader.name === userData?.name ? 'bg-green-50 dark:bg-green-900/20' : 'hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
                                 <div className="flex items-center gap-6">
-                                    <span className={`w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg ${index === 0 ? 'bg-yellow-100 text-yellow-600' :
-                                            index === 1 ? 'bg-slate-100 text-slate-600' :
-                                                index === 2 ? 'bg-orange-100 text-orange-600' : 'text-slate-400'
+                                    <span className={`w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg ${index === 0 ? 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-500' :
+                                        index === 1 ? 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300' :
+                                            index === 2 ? 'bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-500' : 'text-slate-400 dark:text-slate-500'
                                         }`}>
                                         {index + 1}
                                     </span>
                                     <div>
-                                        <p className={`font-bold text-lg ${leader.name === userData?.name ? 'text-green-700' : 'text-slate-800'}`}>
+                                        <p className={`font-bold text-lg ${leader.name === userData?.name ? 'text-green-700 dark:text-green-400' : 'text-slate-800 dark:text-white'}`}>
                                             {leader.businessName || leader.name} {leader.name === userData?.name && '(You)'}
                                         </p>
                                         <p className="text-sm text-slate-400">Verified Business</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="font-bold text-slate-800 text-xl">{leader.xp} XP</div>
+                                    <div className="font-bold text-slate-800 dark:text-white text-xl">{leader.xp} XP</div>
                                     <div className="text-xs text-slate-400">Total Score</div>
                                 </div>
                             </div>

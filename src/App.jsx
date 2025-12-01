@@ -12,6 +12,8 @@ import ModuleDetailPage from './pages/ModuleDetailPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import ResourcesPage from './pages/ResourcesPage';
 
+import SecurityBot from './components/Chatbot/SecurityBot';
+
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { currentUser } = useAuth();
@@ -23,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
 
 function AppRoutes() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300">
       <Navbar />
       <div className="flex-1">
         <Routes>
@@ -68,6 +70,7 @@ export default function App() {
       <AuthProvider>
         <DataProvider>
           <AppRoutes />
+          <SecurityBot />
         </DataProvider>
       </AuthProvider>
     </Router>
