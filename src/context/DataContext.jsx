@@ -12,7 +12,7 @@ export function useData() {
 
 export function DataProvider({ children }) {
     const { currentUser, userData } = useAuth();
-    const [modules, setModules] = useState(MODULES_DATA);
+    const [modules, setModules] = useState(MODULES_DATA || []);
 
     async function completeModule(moduleId, xpEarned) {
         if (!currentUser) return;
