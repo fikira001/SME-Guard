@@ -1,6 +1,7 @@
 import React from 'react';
 import { Shield, ChevronRight, User, Trophy, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Footer from '../components/Layout/Footer';
 
 export default function LandingPage() {
     return (
@@ -46,6 +47,7 @@ export default function LandingPage() {
                     </div>
                 </div>
             </main>
+            <Footer />
         </div>
     );
 }

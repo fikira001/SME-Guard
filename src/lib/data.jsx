@@ -167,7 +167,18 @@ Don't leave passwords on sticky notes under keyboards. It's the first place an "
                 "Monitor for unusual data activity."
             ]
         },
-        questions: Array(10).fill({ q: "What is the principle of Least Privilege?", options: ["Give access to everything", "Give access only to what is needed", "Give access to managers only", "Give no access"], correct: 1 })
+        questions: [
+            { q: "What is the 'Principle of Least Privilege'?", options: ["Giving everyone admin access", "Giving staff only the access they need to do their job", "Restricting internet access completely", "Only managers have computers"], correct: 1 },
+            { q: "An employee has resigned. When should you revoke their email access?", options: ["At the end of the month", "After they leave the building", "Immediately", "When they ask you to"], correct: 2 },
+            { q: "Which of these is a sign of a potential insider threat?", options: ["Working normal hours", "Downloading large amounts of data at 2 AM", "Taking a lunch break", "Asking for a raise"], correct: 1 },
+            { q: "Why is a 'Clean Desk Policy' important?", options: ["It looks professional", "It prevents cleaners from stealing", "It prevents sensitive info (like passwords) from being seen by unauthorized people", "It saves paper"], correct: 2 },
+            { q: "Who should have access to the company's main bank account?", options: ["Everyone", "The Social Media Manager", "Only authorized finance staff and owners", "The IT intern"], correct: 2 },
+            { q: "What is 'Shadow IT'?", options: ["Working in the dark", "Employees using unauthorized software/apps for work", "IT staff wearing black", "A backup server"], correct: 1 },
+            { q: "A colleague asks to borrow your login because theirs isn't working. What do you do?", options: ["Give it to them", "Type it in for them", "Refuse and tell them to contact IT", "Write it on a post-it"], correct: 2 },
+            { q: "Why should you monitor user activity logs?", options: ["To spy on employees", "To detect unusual behavior or unauthorized access", "To see who works the hardest", "To check internet history"], correct: 1 },
+            { q: "What is the risk of shared accounts (e.g., one 'admin' login for everyone)?", options: ["It saves money", "You can't trace who did what", "It is faster", "It is more secure"], correct: 1 },
+            { q: "How can you prevent data theft by departing employees?", options: ["Search their bags", "Disable USB ports and monitor transfers", "Ask them nicely", "You can't"], correct: 1 }
+        ]
     },
     {
         id: 5,
@@ -196,7 +207,18 @@ This is your only 100% guarantee against ransomware.
                 "Disconnect infected devices immediately."
             ]
         },
-        questions: Array(10).fill({ q: "What is the best defense against Ransomware?", options: ["Antivirus", "Paying the ransom", "Regular Backups", "Shutting down the PC"], correct: 2 })
+        questions: [
+            { q: "What is the primary goal of Ransomware?", options: ["To steal passwords", "To encrypt files and demand payment", "To slow down the internet", "To display ads"], correct: 1 },
+            { q: "What is the '3-2-1' backup rule?", options: ["3 copies, 2 formats, 1 offsite", "3 passwords, 2 users, 1 admin", "3 backups, 2 days, 1 week", "3 computers, 2 servers, 1 cloud"], correct: 0 },
+            { q: "If your computer is infected with ransomware, what is the FIRST thing you should do?", options: ["Pay the ransom", "Disconnect it from the network/internet", "Restart it", "Call the police"], correct: 1 },
+            { q: "Why is paying the ransom a bad idea?", options: ["It is too expensive", "It is illegal", "There is no guarantee you will get your files back", "Bitcoin is hard to buy"], correct: 2 },
+            { q: "How does ransomware commonly infect a system?", options: ["Through the power cable", "Phishing emails with malicious attachments", "Leaving the computer on", "Using a wireless mouse"], correct: 1 },
+            { q: "What is an 'Offline Backup'?", options: ["A backup stored on the internet", "A backup not connected to the network (e.g., external drive in a drawer)", "A failed backup", "A paper copy"], correct: 1 },
+            { q: "Why are cloud backups useful against ransomware?", options: ["They are cheaper", "They are usually immune to local infections if configured correctly", "They are faster", "They don't need internet"], correct: 1 },
+            { q: "What file extension is suspicious in an email attachment?", options: [".pdf", ".docx", ".exe or .vbs", ".jpg"], correct: 2 },
+            { q: "Can ransomware spread to other computers on the same Wi-Fi?", options: ["No", "Yes, it can travel across the network", "Only if they are the same brand", "Only via Bluetooth"], correct: 1 },
+            { q: "What is the best way to prevent ransomware?", options: ["Antivirus, Backups, and Staff Training", "Buying a Mac", "Using a VPN", "Turning off the internet"], correct: 0 }
+        ]
     },
     {
         id: 6,
@@ -222,7 +244,18 @@ Public Wi-Fi (at cafes, airports, hotels) is dangerous. Hackers can sit nearby a
                 "Keep work devices separate from personal family devices."
             ]
         },
-        questions: Array(10).fill({ q: "What does a VPN do?", options: ["Speeds up internet", "Encrypts your internet connection", "Blocks ads", "Downloads files"], correct: 1 })
+        questions: [
+            { q: "Why is Public Wi-Fi dangerous?", options: ["It is slow", "Hackers can intercept unencrypted traffic", "It costs money", "It blocks VPNs"], correct: 1 },
+            { q: "What tool encrypts your internet connection?", options: ["GPS", "VPN", "ISP", "DNS"], correct: 1 },
+            { q: "What should you change immediately on a new home router?", options: ["The color", "The default admin password", "The antenna position", "The power cable"], correct: 1 },
+            { q: "Why should you use a separate 'Guest Network' for smart home devices?", options: ["To speed up the internet", "To isolate them from your work computer in case they are hacked", "To stop guests from downloading movies", "It looks professional"], correct: 1 },
+            { q: "Is it safe to let family members use your work laptop?", options: ["Yes, for homework", "No, they might accidentally download malware", "Only on weekends", "Yes, if they are careful"], correct: 1 },
+            { q: "What does WPA2/WPA3 refer to?", options: ["Wi-Fi Speed", "Wi-Fi Security Protocols", "Router Brands", "Internet Providers"], correct: 1 },
+            { q: "When working remotely, where should you save company files?", options: ["On your personal desktop", "On a USB drive", "On the company's secure cloud/server", "In your email drafts"], correct: 2 },
+            { q: "What is 'Shoulder Surfing'?", options: ["Swimming technique", "Someone looking at your screen to steal info", "Surfing the web at work", "A yoga pose"], correct: 1 },
+            { q: "Why is a screen privacy filter useful?", options: ["It reduces glare", "It prevents people sitting next to you from reading your screen", "It protects the glass", "It looks cool"], correct: 1 },
+            { q: "If you lose your work laptop, what should you do?", options: ["Buy a new one", "Report it to IT immediately for remote wiping", "Wait a few days to see if it turns up", "Post about it on Facebook"], correct: 1 }
+        ]
     },
     {
         id: 7,
@@ -248,7 +281,18 @@ Hackers look at your LinkedIn to see who your boss is, who your vendors are, and
                 "Be careful accepting friend requests from strangers."
             ]
         },
-        questions: Array(10).fill({ q: "Is it safe to post a picture of your work ID card?", options: ["Yes", "No", "Only on Instagram", "Only if you blur the face"], correct: 1 })
+        questions: [
+            { q: "What is 'Oversharing'?", options: ["Sharing too much food", "Posting sensitive personal/work info online", "Sharing files securely", "Talking too much"], correct: 1 },
+            { q: "Why is posting a photo of your boarding pass dangerous?", options: ["People will be jealous", "The barcode contains personal data", "It is illegal", "Airlines don't like it"], correct: 1 },
+            { q: "How can hackers use your LinkedIn profile?", options: ["To endorse your skills", "To craft targeted phishing emails (Spear Phishing)", "To offer you a job", "To network"], correct: 1 },
+            { q: "Is it safe to post 'Going on vacation for 2 weeks!' publicly?", options: ["Yes", "No, it tells burglars your home/office is empty", "Only on Instagram", "Only if you tag friends"], correct: 1 },
+            { q: "What should you check before accepting a friend request?", options: ["Their profile picture", "If you actually know them and if the profile looks real", "How many friends they have", "Their posts"], correct: 1 },
+            { q: "Why shouldn't you post photos of your work ID badge?", options: ["It's ugly", "Criminals can copy it to fake an ID", "It belongs to the company", "It has a bad photo"], correct: 1 },
+            { q: "What is 'Spear Phishing'?", options: ["Fishing with a spear", "Phishing targeted at a specific person using their personal info", "Phishing for whales", "Random email spam"], correct: 1 },
+            { q: "Can your birthday be used against you?", options: ["No", "Yes, it is often used in security questions or PINs", "Only if you are famous", "Only by banks"], correct: 1 },
+            { q: "What is a 'Sock Puppet' account?", options: ["A fake account used for spying or manipulation", "A puppet show", "A verified account", "A bot"], correct: 0 },
+            { q: "What should you do if you see a fake profile impersonating your CEO?", options: ["Add them", "Report it to the platform and your IT team", "Ignore it", "Message them"], correct: 1 }
+        ]
     },
     {
         id: 8,
@@ -271,7 +315,18 @@ Hackers look at your LinkedIn to see who your boss is, who your vendors are, and
                 "Update your browser and plugins regularly."
             ]
         },
-        questions: Array(10).fill({ q: "What is a 'Zero-Day' vulnerability?", options: ["A bug known for 0 days (new)", "A bug fixed in 0 days", "A virus that lasts 0 days", "No risk"], correct: 0 })
+        questions: [
+            { q: "What is the main reason to update software?", options: ["New emojis", "Security patches for vulnerabilities", "Better colors", "It's required by law"], correct: 1 },
+            { q: "What happens if you click 'Remind me later' on updates?", options: ["Nothing", "You remain vulnerable to known attacks", "The computer gets faster", "The update deletes itself"], correct: 1 },
+            { q: "What is a 'Patch'?", options: ["A piece of cloth", "Code that fixes a security bug", "A virus", "A password"], correct: 1 },
+            { q: "Why are 'Unsupported' operating systems (like Windows 7) dangerous?", options: ["They are old", "They no longer receive security updates", "They are slow", "They don't run games"], correct: 1 },
+            { q: "Which software needs updating?", options: ["Only Windows", "Only Antivirus", "OS, Browsers, and all Applications", "Only Games"], correct: 2 },
+            { q: "What is 'Automatic Updates'?", options: ["A setting that installs updates without you needing to check", "A robot", "A virus", "A manual process"], correct: 0 },
+            { q: "How often should you update your antivirus?", options: ["Once a year", "Never", "Daily/Automatically", "When you get a virus"], correct: 2 },
+            { q: "Can a PDF reader have security holes?", options: ["No", "Yes, and they need updates too", "Only if you pay for it", "Only on Mac"], correct: 1 },
+            { q: "What is the safest setting for updates?", options: ["Never check", "Check but let me choose", "Install updates automatically", "Disable Windows Update"], correct: 2 },
+            { q: "Why do hackers love it when you don't update?", options: ["It's easier to exploit known vulnerabilities", "They like old software", "It saves them time", "They don't care"], correct: 0 }
+        ]
     },
     {
         id: 9,
@@ -301,7 +356,18 @@ Attackers often dress up as delivery drivers or repairmen to get into offices.
                 "Don't leave passwords on sticky notes."
             ]
         },
-        questions: Array(10).fill({ q: "What is 'Tailgating'?", options: ["Driving too close", "Following someone into a secure area without a badge", "Partying in the parking lot", "Sharing a password"], correct: 1 })
+        questions: [
+            { q: "What is 'Tailgating' in physical security?", options: ["Driving close to a car", "Following an authorized person through a door", "A party", "Waiting in line"], correct: 1 },
+            { q: "What should you do if you see a stranger in the office without a badge?", options: ["Ignore them", "Politely ask if they need help or report to security", "Hide", "Take a photo"], correct: 1 },
+            { q: "Why should you shred documents?", options: ["To make confetti", "To prevent 'Dumpster Diving' for sensitive info", "To save space", "It's fun"], correct: 1 },
+            { q: "What is the shortcut to lock a Windows PC?", options: ["Ctrl + C", "Windows Key + L", "Alt + F4", "Esc"], correct: 1 },
+            { q: "Where is the worst place to leave a password?", options: ["In your head", "In a password manager", "On a sticky note on the monitor", "In a safe"], correct: 2 },
+            { q: "A delivery person asks you to hold the secure door open. What do you do?", options: ["Hold it open to be polite", "Ask them to use the intercom/reception", "Let them in", "Ignore them"], correct: 1 },
+            { q: "What is a 'Clean Desk Policy'?", options: ["Cleaning your desk daily", "Clearing all sensitive documents/media from the desk when away", "Using sanitizer", "No food allowed"], correct: 1 },
+            { q: "Why are server rooms usually locked?", options: ["To keep them cool", "To prevent unauthorized physical access", "To hide the cables", "To reduce noise"], correct: 1 },
+            { q: "Can a visitor be left alone in the office?", options: ["Yes, if they look nice", "No, they should always be escorted", "Only in the kitchen", "Yes, for 5 minutes"], correct: 1 },
+            { q: "What is 'Dumpster Diving'?", options: ["Swimming in trash", "Looking through trash for sensitive information", "Recycling", "A sport"], correct: 1 }
+        ]
     },
     {
         id: 10,
@@ -328,6 +394,17 @@ Don't wait until you are hacked to find the phone number of your IT support. Wri
                 "Be transparent with customers if their data is at risk."
             ]
         },
-        questions: Array(10).fill({ q: "What is the first step if you suspect a malware infection?", options: ["Email the CEO", "Disconnect the device from the network", "Turn off the monitor", "Run a speed test"], correct: 1 })
+        questions: [
+            { q: "What is the first step in Incident Response?", options: ["Panic", "Containment (Disconnecting)", "Formatting", "Tweeting"], correct: 1 },
+            { q: "Why is 'Containment' important?", options: ["To save electricity", "To stop the attack from spreading", "To hide the evidence", "To punish the computer"], correct: 1 },
+            { q: "Who should you notify if customer data is stolen in Nigeria?", options: ["Nobody", "NITDA and the affected customers", "The police only", "Your neighbors"], correct: 1 },
+            { q: "What is an 'Incident Response Plan'?", options: ["A fire drill", "A documented set of instructions on what to do during a cyberattack", "A backup plan", "A meeting"], correct: 1 },
+            { q: "Why should you document everything during an incident?", options: ["For legal reasons and learning", "To write a book", "To blame someone", "It's not needed"], correct: 0 },
+            { q: "What is 'Eradication'?", options: ["Deleting files", "Removing the threat/malware from the system", "Buying new computers", "Firing staff"], correct: 1 },
+            { q: "Should you try to hack the attacker back?", options: ["Yes, revenge", "No, it is illegal and dangerous", "Only if you are angry", "Yes, if you know who it is"], correct: 1 },
+            { q: "Why is communication important during a breach?", options: ["To gossip", "To manage reputation and inform stakeholders", "To scare people", "To ask for money"], correct: 1 },
+            { q: "What is a 'Post-Incident Review'?", options: ["A party", "Analyzing what happened to prevent it from happening again", "Forgetting about it", "Deleting logs"], correct: 1 },
+            { q: "When should you create an Incident Response Plan?", options: ["After a hack", "Right now (Before an incident)", "Never", "When you have free time"], correct: 1 }
+        ]
     }
 ];

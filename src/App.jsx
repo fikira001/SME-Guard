@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import Navbar from './components/Layout/Navbar';
-import Footer from './components/Layout/Footer';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
@@ -59,7 +58,6 @@ function AppRoutes() {
           } />
         </Routes>
       </div>
-      <Footer />
     </div>
   );
 }

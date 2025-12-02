@@ -9,34 +9,46 @@ export default function Quiz({ module, onBack }) {
     const [score, setScore] = useState(0);
     const [showScore, setShowScore] = useState(false);
 
-    const handleAnswer = (optionIndex) => {
-        const isCorrect = optionIndex === module.questions[activeQuizIndex].correct;
-        if (isCorrect) setScore(score + 1);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [answers, setAnswers] = useState({}); // Store answers for all questions
 
+    const handleOptionSelect = (optionIndex) => {
+        setSelectedOption(optionIndex);
+        setAnswers(prev => ({ ...prev, [activeQuizIndex]: optionIndex }));
+    };
+
+    const handleNext = () => {
         const nextQuestion = activeQuizIndex + 1;
         if (nextQuestion < module.questions.length) {
             setActiveQuizIndex(nextQuestion);
+            setSelectedOption(answers[nextQuestion] ?? null);
         } else {
-            setShowScore(true);
-            // Calculate XP: if correct, add bonus? Logic from original code:
-            // const xpEarned = isCorrect ? (score + 1) * 10 : score * 10; 
-            // Wait, score isn't updated yet in state for the last question.
-            // Let's fix the logic.
-            const finalScore = isCorrect ? score + 1 : score;
-            const xpEarned = Math.round((finalScore / module.questions.length) * module.xpReward);
+            finishQuiz();
+        }
+    };
 
-            // Only award XP if passed? Or just give XP based on score?
-            // Original code: const xpEarned = isCorrect ? (score + 1) * 10 : score * 10;
-            // And it adds to user.xp.
-            // Let's assume we give full reward if score > 70%? Or just proportional?
-            // Let's stick to proportional for now or just fixed reward if completed.
-            // Original code logic was a bit weird with * 10.
-            // Let's just give the module.xpReward if they finish, maybe?
-            // Or better: give module.xpReward * (score/total).
+    const handlePrev = () => {
+        const prevQuestion = activeQuizIndex - 1;
+        if (prevQuestion >= 0) {
+            setActiveQuizIndex(prevQuestion);
+            setSelectedOption(answers[prevQuestion]);
+        }
+    };
 
-            if (finalScore > 0) {
-                completeModule(module.id, xpEarned);
+    const finishQuiz = () => {
+        let calculatedScore = 0;
+        module.questions.forEach((q, index) => {
+            if (answers[index] === q.correct) {
+                calculatedScore += 1;
             }
+        });
+
+        setScore(calculatedScore);
+        setShowScore(true);
+
+        const xpEarned = Math.round((calculatedScore / module.questions.length) * module.xpReward);
+        if (calculatedScore > 0) {
+            completeModule(module.id, xpEarned);
         }
     };
 
@@ -95,16 +107,48 @@ export default function Quiz({ module, onBack }) {
                         </h3>
 
                         <div className="space-y-3">
-                            {module.questions[activeQuizIndex].options.map((option, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => handleAnswer(idx)}
-                                    className="w-full text-left p-5 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-green-500 dark:hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition group flex items-center justify-between"
-                                >
-                                    <span className="text-slate-700 dark:text-slate-300 font-medium group-hover:text-green-700 dark:group-hover:text-green-400">{option}</span>
-                                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-green-500 opacity-0 group-hover:opacity-100 transition" />
-                                </button>
-                            ))}
+                            {module.questions[activeQuizIndex].options.map((option, idx) => {
+                                const letters = ['A', 'B', 'C', 'D'];
+                                return (
+                                    <button
+                                        key={idx}
+                                        onClick={() => handleOptionSelect(idx)}
+                                        className={`w-full text-left p-5 rounded-xl border transition group flex items-center justify-between ${selectedOption === idx
+                                            ? 'border-green-500 bg-green-50 dark:bg-green-900/20 ring-1 ring-green-500'
+                                            : 'border-slate-200 dark:border-slate-700 hover:border-green-500 dark:hover:border-green-500 hover:bg-slate-50 dark:hover:bg-slate-800'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <span className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold ${selectedOption === idx
+                                                ? 'bg-green-500 text-white'
+                                                : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 group-hover:bg-green-100 dark:group-hover:bg-green-900/40 group-hover:text-green-600 dark:group-hover:text-green-400'
+                                                }`}>
+                                                {letters[idx]}
+                                            </span>
+                                            <span className={`font-medium ${selectedOption === idx ? 'text-green-700 dark:text-green-400' : 'text-slate-700 dark:text-slate-300'}`}>{option}</span>
+                                        </div>
+                                        {selectedOption === idx && <div className="w-4 h-4 rounded-full bg-green-500 flex-shrink-0"></div>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        <div className="flex justify-between mt-8">
+                            <button
+                                onClick={handlePrev}
+                                disabled={activeQuizIndex === 0}
+                                className="px-6 py-2 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                onClick={handleNext}
+                                disabled={selectedOption === null}
+                                className="px-6 py-2 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center gap-2"
+                            >
+                                {activeQuizIndex === module.questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
                         </div>
                     </div>
                     <div className="h-2 bg-slate-100 dark:bg-slate-700">
