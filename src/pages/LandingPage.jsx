@@ -2,8 +2,11 @@ import React from 'react';
 import { Shield, ChevronRight, User, Trophy, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Layout/Footer';
+import { useAuth } from '../context/AuthContext';
 
 export default function LandingPage() {
+    const { currentUser } = useAuth();
+
     return (
         <div className="min-h-screen bg-slate-900 text-white flex flex-col">
             {/* Note: Navbar is handled in Layout */}
@@ -21,9 +24,15 @@ export default function LandingPage() {
                     Learn to spot fake alerts, secure your POS, and protect your staff.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 z-10">
-                    <Link to="/signup" className="px-8 py-4 bg-green-500 hover:bg-green-600 text-slate-900 font-bold rounded-lg text-lg flex items-center justify-center gap-2 transition transform hover:scale-105">
-                        Start Free Training <ChevronRight />
-                    </Link>
+                    {currentUser ? (
+                        <Link to="/dashboard" className="px-8 py-4 bg-green-500 hover:bg-green-600 text-slate-900 font-bold rounded-lg text-lg flex items-center justify-center gap-2 transition transform hover:scale-105">
+                            Go to Dashboard <ChevronRight />
+                        </Link>
+                    ) : (
+                        <Link to="/signup" className="px-8 py-4 bg-green-500 hover:bg-green-600 text-slate-900 font-bold rounded-lg text-lg flex items-center justify-center gap-2 transition transform hover:scale-105">
+                            Start Free Training <ChevronRight />
+                        </Link>
+                    )}
                     <Link to="/modules" className="px-8 py-4 border border-slate-700 hover:border-green-400 rounded-lg text-lg font-medium transition">
                         View Modules
                     </Link>

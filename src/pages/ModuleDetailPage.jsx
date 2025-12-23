@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useParams, Link } from 'react-router-dom';
 import { BookOpen, ChevronRight } from 'lucide-react';
 import { useData } from '../context/DataContext';
@@ -32,7 +33,7 @@ export default function ModuleDetailPage() {
                     </div>
                 </div>
                 <div className="prose prose-lg prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 whitespace-pre-line leading-relaxed">
-                    {module.resource.content}
+                    <ReactMarkdown>{module.resource.content}</ReactMarkdown>
                 </div>
             </div>
 

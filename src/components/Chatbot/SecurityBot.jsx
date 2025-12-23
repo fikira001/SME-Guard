@@ -1,14 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Shield, Bot } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, Loader2 } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import { useAuth } from '../../context/AuthContext';
+import { chatWithSecurityBot } from '../../services/aiService';
 import { MODULES_DATA } from '../../lib/data';
 
 export default function SecurityBot() {
+    const { userData } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { id: 1, text: "Hi! I'm your SME-Guard Assistant. Ask me anything about cybersecurity (e.g., 'How do I stop phishing?', 'What is 2FA?').", sender: 'bot' }
+        { id: 1, text: "Hi! I'm your SME-Guard Assistant. I'm powered by AI to help you secure your business. Ask me anything!", sender: 'bot' }
     ]);
     const [input, setInput] = useState('');
+    const [isThinking, setIsThinking] = useState(false);
     const messagesEndRef = useRef(null);
+    const location = useLocation();
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -16,44 +23,46 @@ export default function SecurityBot() {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
+    }, [messages, isThinking]);
 
-    const handleSend = (e) => {
+    const handleSend = async (e) => {
         e.preventDefault();
-        if (!input.trim()) return;
+        if (!input.trim() || isThinking) return;
 
-        // User Message
+        // 1. Add User Message
         const userMsg = { id: Date.now(), text: input, sender: 'user' };
         setMessages(prev => [...prev, userMsg]);
         setInput('');
+        setIsThinking(true);
 
-        // Bot Logic (Simple Keyword Search)
-        setTimeout(() => {
-            const lowerInput = input.toLowerCase();
-            let foundAnswer = null;
+        // 2. Prepare Context with User Details
+        const currentPath = location.pathname;
+        const availableModules = MODULES_DATA.map(m => m.title).join(", ");
 
-            // Search through modules
-            for (const module of MODULES_DATA) {
-                if (module.title.toLowerCase().includes(lowerInput) ||
-                    module.description.toLowerCase().includes(lowerInput) ||
-                    module.resource.content.toLowerCase().includes(lowerInput)) {
+        const userName = userData?.fullName || "Business Administrator";
+        const businessName = userData?.businessName || "SME";
+        const userXP = userData?.xp || 0;
 
-                    foundAnswer = {
-                        text: `Here's what I found in the "${module.title}" module:\n\n${module.resource.keyTakeaways[0]}\n\nCheck out the full module for more!`,
-                        link: `/modules/${module.id}`
-                    };
-                    break;
-                }
-            }
+        const context = `
+        User Name: ${userName}
+        Business Name: ${businessName}
+        Current XP: ${userXP}
+        Current URL: "${currentPath}"
+        Available Modules: [${availableModules}]
+        `;
 
-            const botMsg = {
-                id: Date.now() + 1,
-                text: foundAnswer ? foundAnswer.text : "I'm not sure about that one yet. Try asking about 'passwords', 'phishing', or 'ransomware', or check our Resources page.",
-                sender: 'bot',
-                link: foundAnswer?.link
-            };
-            setMessages(prev => [...prev, botMsg]);
-        }, 1000);
+        // 3. Call AI Service
+        const responseText = await chatWithSecurityBot(userMsg.text, context);
+
+        // 4. Add Bot Message
+        const botMsg = {
+            id: Date.now() + 1,
+            text: responseText,
+            sender: 'bot'
+        };
+
+        setMessages(prev => [...prev, botMsg]);
+        setIsThinking(false);
     };
 
     return (
@@ -65,7 +74,7 @@ export default function SecurityBot() {
                     <div className="bg-green-600 p-4 flex justify-between items-center text-white">
                         <div className="flex items-center gap-2">
                             <Bot className="w-6 h-6" />
-                            <span className="font-bold">Security Assistant</span>
+                            <span className="font-bold">Security Assistant (AI)</span>
                         </div>
                         <button onClick={() => setIsOpen(false)} className="hover:bg-green-700 p-1 rounded">
                             <X className="w-5 h-5" />
@@ -76,21 +85,47 @@ export default function SecurityBot() {
                     <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-slate-950">
                         {messages.map((msg) => (
                             <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.sender === 'user'
-                                        ? 'bg-green-600 text-white rounded-tr-none'
-                                        : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border dark:border-slate-700 rounded-tl-none shadow-sm'
+                                <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${msg.sender === 'user'
+                                    ? 'bg-green-600 text-white rounded-tr-none text-left'
+                                    : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border dark:border-slate-700 rounded-tl-none shadow-sm text-left'
                                     }`}>
-                                    <p className="whitespace-pre-wrap">{msg.text}</p>
-                                    {msg.link && (
-                                        <a href={msg.link} className="block mt-2 text-xs underline font-bold opacity-90 hover:opacity-100">
-                                            Go to Module &rarr;
-                                        </a>
+                                    {msg.sender === 'user' ? (
+                                        <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                                    ) : (
+                                        <div className="prose prose-sm dark:prose-invert max-w-none">
+                                            <ReactMarkdown>{msg.text}</ReactMarkdown>
+                                        </div>
                                     )}
                                 </div>
                             </div>
                         ))}
+
+                        {/* Thinking Indicator */}
+                        {isThinking && (
+                            <div className="flex justify-start">
+                                <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 p-3 rounded-2xl rounded-tl-none shadow-sm flex items-center gap-2">
+                                    <Loader2 className="w-4 h-4 text-green-600 animate-spin" />
+                                    <span className="text-xs text-slate-500 font-medium">Thinking...</span>
+                                </div>
+                            </div>
+                        )}
                         <div ref={messagesEndRef} />
                     </div>
+
+                    {/* Suggestion Chips - Only show when input is empty & no thinking */}
+                    {!isThinking && messages.length < 4 && (
+                        <div className="px-4 pb-2 flex gap-2 flex-wrap justify-end">
+                            {["Spot Phishing", "Secure Business", "Passwords"].map((text) => (
+                                <button
+                                    key={text}
+                                    onClick={() => setInput(text)}
+                                    className="text-xs bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full hover:bg-green-100 transition"
+                                >
+                                    {text}
+                                </button>
+                            ))}
+                        </div>
+                    )}
 
                     {/* Input */}
                     <form onSubmit={handleSend} className="p-3 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex gap-2">
@@ -98,10 +133,15 @@ export default function SecurityBot() {
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="Ask a security question..."
-                            className="flex-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                            placeholder="Ask specific security questions..."
+                            disabled={isThinking}
+                            className="flex-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 text-sm disabled:opacity-50"
                         />
-                        <button type="submit" className="p-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition disabled:opacity-50" disabled={!input.trim()}>
+                        <button
+                            type="submit"
+                            className="p-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={!input.trim() || isThinking}
+                        >
                             <Send className="w-5 h-5" />
                         </button>
                     </form>
