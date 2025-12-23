@@ -1,16 +1,44 @@
-# React + Vite
+# SME-Guard 🛡️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Secure Your Business Against Cyber Threats.**
 
-Currently, two official plugins are available:
+SME-Guard is a gamified cybersecurity awareness training platform tailored for Small and Medium Enterprises (SMEs) in Nigeria. It empowers business owners and staff to identify, prevent, and respond to cyber threats through interactive modules and AI-driven assistance.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+*   **Role-Based Learning**: Customized training paths for Business Owners, Staff, and IT admins.
+*   **Gamification**: Earn XP, badges, and climb the leaderboard as you learn.
+*   **Context-Aware AI Assistant**: Integrated "Security Bot" provides instant answers to security queries, powered by a hybrid Cloud/Local intelligence engine.
+*   **Localized Content**: Modules specifically address Nigerian context (NDPR, local bank frauds, BVN security).
+*   **Offline Capability**: Critical security advice is available even without an internet connection.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Technology Stack
 
-## Expanding the ESLint configuration
+*   **Frontend**: React (Vite), TailwindCSS
+*   **Backend/BaaS**: Firebase (Auth, Firestore)
+*   **AI**: Google Gemini API (Flash 1.5) + Local Fallback Engine
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🏁 Getting Started
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/your-username/sme-guard.git
+    cd sme-guard
+    ```
+
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+3.  **Run Development Server**:
+    ```bash
+    npm run dev
+    ```
+
+## 🔒 Security & Privacy
+
+This platform adheres to **NDPR** principles. No personal data is shared with third parties without consent.
+
+---
+*Built for the 2025 Glo-Antigravity Hackathon.*

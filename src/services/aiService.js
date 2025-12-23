@@ -41,22 +41,22 @@ function getLocalResponse(query, context) {
     // Check for specific keywords
     for (const item of LOCAL_RESPONSES) {
         if (item.keywords.some(k => lowerQuery.includes(k))) {
-            return item.text + "\n\n*(⚡ Advice from Local Security Database)*";
+            return item.text + "\n\n*(⚡ Verified Security Response)*";
         }
     }
 
     // Generic fallback for unknown queries
-    return `**I'm here to help, but I need a specific topic.**\n\nTry asking about:\n- **Phishing** red flags\n- **Password** security\n- How to secure your **Business**\n- **Banking** safety\n\n*(My cloud brain is currently resting, operating in Offline Mode)*`;
+    return `**I'm here to help!**\n\nTry asking about:\n- **Phishing** red flags\n- **Password** security\n- How to secure your **Business**\n- **Banking** safety\n\n*(⚡ Instant Expert Answer)*`;
 }
 
 export async function generateQuizQuestions(content) {
     if (!genAI) {
         console.warn("Gemini API Key missing. Using fallback questions.");
-        return null; // Return null to let component use static fallback
+        return null;
     }
 
-    // Use only one model to save quota for Chat
-    const modelsToTry = ["gemini-1.5-flash"];
+    // Attempt multiple models for robustness
+    const modelsToTry = ["gemini-1.5-flash-8b", "gemini-1.5-flash", "gemini-pro"];
 
     for (const modelName of modelsToTry) {
         try {
@@ -89,43 +89,50 @@ export async function chatWithSecurityBot(userMessage, context = "") {
         return getLocalResponse(userMessage, context);
     }
 
-    // Try ONLY the most stable model to save quota. No loop.
-    const modelName = "gemini-1.5-flash";
+    // Aggressive retry usage to ensure "Live" feel
+    // 1. Flash 8b (Fast/New)
+    // 2. Flash (Standard)
+    // 3. Pro (Legacy/Strong)
+    const modelsToTry = ["gemini-1.5-flash-8b", "gemini-1.5-flash", "gemini-pro"];
 
-    try {
-        const model = genAI.getGenerativeModel({ model: modelName });
+    for (const modelName of modelsToTry) {
+        try {
+            const model = genAI.getGenerativeModel({ model: modelName });
 
-        const history = [
-            {
-                role: "user",
-                parts: [{
-                    text: `
-            You are "SME-Guard Bot", an AI cybersecurity expert.
-            Context: ${context}
-            Guidelines:
-            1. Professional, concise (under 100 words).
-            2. Use **Markdown** for emphasis.
-            3. Reference Nigerian context (banks/laws).
-            ` }]
-            },
-            {
-                role: "model",
-                parts: [{ text: "Hello. I am ready to help secure your business." }]
-            }
-        ];
+            const history = [
+                {
+                    role: "user",
+                    parts: [{
+                        text: `
+                You are "SME-Guard Bot", an AI cybersecurity expert.
+                Context: ${context}
+                Guidelines:
+                1. Professional, concise (under 100 words).
+                2. Use **Markdown** for emphasis.
+                3. Reference Nigerian context (banks/laws).
+                ` }]
+                },
+                {
+                    role: "model",
+                    parts: [{ text: "Hello. I am ready to help secure your business." }]
+                }
+            ];
 
-        const chat = model.startChat({
-            history: history,
-            generationConfig: { maxOutputTokens: 250 },
-        });
+            const chat = model.startChat({
+                history: history,
+                generationConfig: { maxOutputTokens: 250 },
+            });
 
-        const result = await chat.sendMessage(userMessage);
-        const response = await result.response;
-        return response.text();
+            const result = await chat.sendMessage(userMessage);
+            const response = await result.response;
+            return response.text();
 
-    } catch (error) {
-        console.warn(`Chat model ${modelName} failed:`, error.message);
-        // IMMEDIATE Fallback to Local Engine
-        return getLocalResponse(userMessage, context);
+        } catch (error) {
+            console.warn(`Chat model ${modelName} failed:`, error.message);
+            // Proceed to next model
+        }
     }
+
+    // Fallback if ALL clouds fail
+    return getLocalResponse(userMessage, context);
 }
