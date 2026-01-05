@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trophy } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 export default function LeaderboardPage() {
@@ -10,31 +10,30 @@ export default function LeaderboardPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchLeaderboard() {
-            try {
-                const q = query(collection(db, "users"), orderBy("xp", "desc"), limit(10));
-                const querySnapshot = await getDocs(q);
-                const fetchedLeaders = [];
-                querySnapshot.forEach((doc) => {
-                    fetchedLeaders.push(doc.data());
-                });
-                setLeaders(fetchedLeaders);
-            } catch (error) {
-                console.error("Error fetching leaderboard:", error);
-                // Fallback to mock data if Firestore fails or is empty
-                setLeaders([
-                    { name: "Lagos Tech Hub", xp: 1200, businessName: "Lagos Tech Hub" },
-                    { name: "Kano Textiles Ltd", xp: 850, businessName: "Kano Textiles Ltd" },
-                    { name: "Abuja Logistics", xp: 720, businessName: "Abuja Logistics" },
-                    { name: "Benin Agro Allied", xp: 600, businessName: "Benin Agro Allied" },
-                    { name: "Delta Oil Services", xp: 550, businessName: "Delta Oil Services" },
-                ]);
-            } finally {
-                setLoading(false);
-            }
-        }
+        setLoading(true);
+        const q = query(collection(db, "users"), orderBy("xp", "desc"), limit(10));
 
-        fetchLeaderboard();
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const fetchedLeaders = [];
+            snapshot.forEach((doc) => {
+                fetchedLeaders.push(doc.data());
+            });
+            setLeaders(fetchedLeaders);
+            setLoading(false);
+        }, (error) => {
+            console.error("Error fetching leaderboard:", error);
+            // Fallback to mock data if Firestore fails or is empty
+            setLeaders([
+                { name: "Lagos Tech Hub", xp: 1200, businessName: "Lagos Tech Hub" },
+                { name: "Kano Textiles Ltd", xp: 850, businessName: "Kano Textiles Ltd" },
+                { name: "Abuja Logistics", xp: 720, businessName: "Abuja Logistics" },
+                { name: "Benin Agro Allied", xp: 600, businessName: "Benin Agro Allied" },
+                { name: "Delta Oil Services", xp: 550, businessName: "Delta Oil Services" },
+            ]);
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
     }, []);
 
     return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Trophy, Loader2 } from 'lucide-react';
+import { ChevronRight, Trophy, Loader2, Sparkles, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { generateQuizQuestions } from '../../services/aiService';
@@ -13,34 +13,46 @@ export default function Quiz({ module, onBack }) {
     // AI Integration State
     const [questions, setQuestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isAiGenerated, setIsAiGenerated] = useState(false);
 
     const [selectedOption, setSelectedOption] = useState(null);
     const [answers, setAnswers] = useState({}); // Store answers for all questions
 
-    useEffect(() => {
-        const fetchQuestions = async () => {
-            setIsLoading(true);
-            try {
-                // Determine if we should try AI generation
-                // Only try if we have an API key (handled in service) and content available
-                const aiQuestions = await generateQuizQuestions(module.resource.content);
+    const generateQuiz = async (retry = false) => {
+        setIsLoading(true);
+        // Reset state for new quiz
+        if (retry) {
+            setActiveQuizIndex(0);
+            setScore(0);
+            setShowScore(false);
+            setAnswers({});
+            setSelectedOption(null);
+        }
 
-                if (aiQuestions && Array.isArray(aiQuestions) && aiQuestions.length > 0) {
-                    setQuestions(aiQuestions);
-                } else {
-                    // Fallback to static questions
-                    setQuestions(module.questions);
-                }
-            } catch (error) {
-                console.error("Quiz generation failed:", error);
+        try {
+            // Determine if we should try AI generation
+            const aiQuestions = await generateQuizQuestions(module.resource.content);
+
+            if (aiQuestions && Array.isArray(aiQuestions) && aiQuestions.length > 0) {
+                setQuestions(aiQuestions);
+                setIsAiGenerated(true);
+            } else {
+                // Fallback to static questions
                 setQuestions(module.questions);
-            } finally {
-                setIsLoading(false);
+                setIsAiGenerated(false);
             }
-        };
+        } catch (error) {
+            console.error("Quiz generation failed:", error);
+            setQuestions(module.questions);
+            setIsAiGenerated(false);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
+    useEffect(() => {
         if (module) {
-            fetchQuestions();
+            generateQuiz();
         }
     }, [module]);
 
@@ -149,9 +161,26 @@ export default function Quiz({ module, onBack }) {
         <div className="min-h-[80vh] flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-2xl">
                 <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-slate-200 dark:border-slate-700 transition-colors">
-                    <div className="bg-slate-900 dark:bg-slate-950 p-6 flex justify-between items-center text-white">
-                        <span className="text-slate-400 font-medium">Question {activeQuizIndex + 1}/{questions.length}</span>
-                        <span className="text-green-400 font-bold">{module.title}</span>
+                    <div className="bg-slate-900 dark:bg-slate-950 p-6 flex flex-col md:flex-row justify-between items-center text-white gap-4">
+                        <div className="flex items-center gap-3">
+                            <span className="text-slate-400 font-medium">Question {activeQuizIndex + 1}/{questions.length}</span>
+                            {isAiGenerated && (
+                                <span className="flex items-center gap-1 bg-purple-500/20 text-purple-300 text-xs px-2 py-1 rounded-full border border-purple-500/50">
+                                    <Sparkles className="w-3 h-3" /> AI Generated
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <span className="text-green-400 font-bold hidden md:block">{module.title}</span>
+                            <button
+                                onClick={() => generateQuiz(true)}
+                                className="flex items-center gap-1 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition border border-slate-700"
+                                title="Get new questions from AI"
+                            >
+                                <RefreshCcw className="w-3 h-3" /> Regenerate
+                            </button>
+                        </div>
                     </div>
 
                     <div className="p-8">

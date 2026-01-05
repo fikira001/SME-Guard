@@ -35,8 +35,20 @@ export function AuthProvider({ children }) {
             createdAt: new Date().toISOString()
         };
 
-        await setDoc(doc(db, "users", result.user.uid), userDoc);
-        setUserData(userDoc);
+        try {
+            await setDoc(doc(db, "users", result.user.uid), userDoc);
+            setUserData(userDoc);
+        } catch (error) {
+            console.error("Error writing user to Firestore:", error);
+            // If permission denied (common in expired test projects), 
+            // set local state anyway so user can enter.
+            if (error.code === 'permission-denied') {
+                console.warn("Firestore Permission Denied. User data will not persist on refresh.");
+                setUserData(userDoc);
+            } else {
+                throw error; // Re-throw other errors
+            }
+        }
         return result;
     }
 

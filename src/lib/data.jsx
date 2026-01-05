@@ -10,6 +10,7 @@ import {
 export const MODULES_DATA = [
     {
         id: 1,
+        difficulty: 'Beginner',
         title: "Phishing & Fraud Prevention",
         description: "Identify and prevent Business Email Compromise, Smishing, and Vishing.",
         icon: <Mail className="w-6 h-6 text-blue-500" />,
@@ -53,6 +54,7 @@ Attackers clone legitimate sites (e.g., \`gtbank-login-secure.com\`).
     },
     {
         id: 2,
+        difficulty: 'Beginner',
         title: "Password & Identity Security",
         description: "Passkeys, MFA, and defending against Credential Stuffing.",
         icon: <Lock className="w-6 h-6 text-red-500" />,
@@ -94,6 +96,7 @@ Passkeys replace passwords with cryptographic key pairs stored on your device.
     },
     {
         id: 3,
+        difficulty: 'Beginner',
         title: "Mobile & POS Security",
         description: "Securing endpoints, MDM, and Safe Payments.",
         icon: <Smartphone className="w-6 h-6 text-green-500" />,
@@ -135,6 +138,7 @@ For businesses with multiple staff, MDM software allows you to:
     },
     {
         id: 4,
+        difficulty: 'Intermediate',
         title: "Insider Threat Mitigation",
         description: "Zero Trust, Principle of Least Privilege, and Offboarding.",
         icon: <User className="w-6 h-6 text-purple-500" />,
@@ -177,6 +181,7 @@ The most dangerous time is when an employee leaves.
     },
     {
         id: 5,
+        difficulty: 'Intermediate',
         title: "Ransomware & Backups",
         description: "Double Extortion, Kill Switches, and 3-2-1 Backup Rule.",
         icon: <AlertTriangle className="w-6 h-6 text-orange-500" />,
@@ -221,6 +226,7 @@ If a computer is infected:
     },
     {
         id: 6,
+        difficulty: 'Intermediate',
         title: "Secure Remote Work",
         description: "VPNs, Home Router Security, and Digital Nomad safety.",
         icon: <Wifi className="w-6 h-6 text-cyan-500" />,
@@ -261,6 +267,7 @@ Public Wi-Fi is an open book. Hackers use "Man-in-the-Middle" attacks to read tr
     },
     {
         id: 7,
+        difficulty: 'Intermediate',
         title: "Social Media & OSINT",
         description: "Managing your Digital Footprint and avoiding targeted attacks.",
         icon: <CheckCircle className="w-6 h-6 text-pink-500" />,
@@ -301,6 +308,7 @@ Public Wi-Fi is an open book. Hackers use "Man-in-the-Middle" attacks to read tr
     },
     {
         id: 8,
+        difficulty: 'Advanced',
         title: "Vulnerability Management",
         description: "Patching, Zero-Days, and EOL Software.",
         icon: <Shield className="w-6 h-6 text-indigo-500" />,
@@ -342,6 +350,7 @@ Humans forget. Configure all OS and Browsers to **Auto-Update**.`,
     },
     {
         id: 9,
+        difficulty: 'Beginner',
         title: "Physical Security",
         description: "Tailgating, Clean Desk, and Data Disposal.",
         icon: <Lock className="w-6 h-6 text-gray-500" />,
@@ -382,6 +391,7 @@ Thieves raid trash for bank statements or invoices.
     },
     {
         id: 10,
+        difficulty: 'Advanced',
         title: "Incident Response",
         description: "What to do exactly when you get hacked.",
         icon: <AlertTriangle className="w-6 h-6 text-red-600" />,
@@ -425,6 +435,7 @@ Post-mortem meeting. How did they get in? Patch that hole.`,
     },
     {
         id: 11,
+        difficulty: 'Advanced',
         title: "Data Privacy & Compliance",
         description: "Understanding NDPR, GDPR, and your legal obligations.",
         icon: <Globe className="w-6 h-6 text-teal-500" />,
@@ -468,6 +479,7 @@ Customers have the right to:
     },
     {
         id: 12,
+        difficulty: 'Advanced',
         title: "Supply Chain Security",
         description: "Managing Vendor Risk and Third-Party access.",
         icon: <Truck className="w-6 h-6 text-yellow-600" />,

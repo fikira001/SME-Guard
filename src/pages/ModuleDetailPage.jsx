@@ -29,7 +29,13 @@ export default function ModuleDetailPage() {
                     <BookOpen className="w-8 h-8 text-green-600 dark:text-green-500" />
                     <div>
                         <h1 className="text-2xl font-bold text-slate-800 dark:text-white">{module.resource.title}</h1>
-                        <p className="text-slate-500 dark:text-slate-400">Module: {module.title}</p>
+                        <p className="text-slate-500 dark:text-slate-400 mb-2">Module: {module.title}</p>
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${module.difficulty === 'Beginner' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                                module.difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                                    'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                            {module.difficulty} Level
+                        </span>
                     </div>
                 </div>
                 <div className="prose prose-lg prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 whitespace-pre-line leading-relaxed">
