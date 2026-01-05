@@ -107,20 +107,22 @@ export async function chatWithSecurityBot(userMessage, context = "") {
                 You are "SME-Guard Bot", an AI cybersecurity expert.
                 Context: ${context}
                 Guidelines:
-                1. Professional, concise (under 100 words).
-                2. Use **Markdown** for emphasis.
-                3. Reference Nigerian context (banks/laws).
+                1. **Comprehensive & Helpful**: Provide detailed, clear explanations. Do not be too brief.
+                2. **Actionable Advice**: Give specific steps (e.g., "Enable 2FA by...").
+                3. **Tone**: Sincere, Professional, and Encouraging.
+                4. **Context**: Always reference Nigerian examples (e.g., CBN guidelines, NITDA, local bank scams) where relevant.
+                5. Use **Markdown** (bolding, lists) for readability.
                 ` }]
                 },
                 {
                     role: "model",
-                    parts: [{ text: "Hello. I am ready to help secure your business." }]
+                    parts: [{ text: "Hello. I am your comprehensive SME-Guard Security Expert. I am ready to provide detailed guidance to secure your business." }]
                 }
             ];
 
             const chat = model.startChat({
                 history: history,
-                generationConfig: { maxOutputTokens: 250 },
+                generationConfig: { maxOutputTokens: 1000 },
             });
 
             const result = await chat.sendMessage(userMessage);

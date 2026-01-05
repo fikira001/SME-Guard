@@ -26,10 +26,19 @@ export function DataProvider({ children }) {
         // Check if already completed to avoid double counting if called incorrectly
         if (userData?.completedModules?.includes(moduleId)) return;
 
-        await updateDoc(userRef, {
-            completedModules: arrayUnion(moduleId),
-            xp: increment(xpEarned)
-        });
+        try {
+            await updateDoc(userRef, {
+                completedModules: arrayUnion(moduleId),
+                xp: increment(xpEarned)
+            });
+        } catch (error) {
+            console.error("Error updating module completion:", error);
+            if (error.code === 'permission-denied') {
+                console.warn("Firestore Write Failed (Permission Denied). XP not saved remotely.");
+                // Note: We cannot force update local state here easily without 
+                // exposing a setter from AuthContext. For now, we log it.
+            }
+        }
     }
 
     const value = {

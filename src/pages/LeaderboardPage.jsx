@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Trophy } from 'lucide-react';
+import { Trophy, RefreshCcw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -40,7 +40,16 @@ export default function LeaderboardPage() {
         <div className="max-w-4xl mx-auto px-4 py-8 min-h-[80vh]">
             <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors">
                 <div className="p-8 bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 text-white text-center">
-                    <Trophy className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                    <div className="relative">
+                        <Trophy className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="absolute top-0 right-0 p-2 text-slate-400 hover:text-white transition"
+                            title="Refresh Leaderboard"
+                        >
+                            <RefreshCcw className="w-5 h-5" />
+                        </button>
+                    </div>
                     <h1 className="text-3xl font-bold mb-2">Top Secure SMEs</h1>
                     <p className="text-slate-400">Recognizing businesses committed to cybersecurity in Nigeria.</p>
                 </div>
