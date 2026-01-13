@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+// HARDCODED KEY AS REQUESTED TO ENSURE SYSTEM WORKS
+const API_KEY = "AIzaSyDz_Fs7_mHflcCVUGsfBUe-IBo_hbcsSrs";
 
 // Initialize Gemini
 let genAI = null;
@@ -56,7 +57,7 @@ export async function generateQuizQuestions(content) {
     }
 
     // Attempt multiple models for robustness
-    const modelsToTry = ["gemini-1.5-flash-8b", "gemini-1.5-flash", "gemini-pro"];
+    const modelsToTry = ["gemma-3-12b-it", "gemini-2.0-flash-exp"];
 
     for (const modelName of modelsToTry) {
         try {
@@ -89,11 +90,11 @@ export async function chatWithSecurityBot(userMessage, context = "") {
         return getLocalResponse(userMessage, context);
     }
 
-    // Aggressive retry usage to ensure "Live" feel
-    // 1. Flash 8b (Fast/New)
-    // 2. Flash (Standard)
-    // 3. Pro (Legacy/Strong)
-    const modelsToTry = ["gemini-1.5-flash-8b", "gemini-1.5-flash", "gemini-pro"];
+    // Aggressive retry usage
+    // 1. Gemma 3 12B (Confirmed Working via Diagnostics)
+    // 2. Gemini Models (Backup)
+    const modelsToTry = ["gemma-3-12b-it", "gemini-2.0-flash-exp"];
+    let lastError = "";
 
     for (const modelName of modelsToTry) {
         try {
@@ -125,16 +126,26 @@ export async function chatWithSecurityBot(userMessage, context = "") {
                 generationConfig: { maxOutputTokens: 1000 },
             });
 
+            console.log(`[AI-DEBUG] Attempting message with model ${modelName}...`);
             const result = await chat.sendMessage(userMessage);
             const response = await result.response;
             return response.text();
 
         } catch (error) {
-            console.warn(`Chat model ${modelName} failed:`, error.message);
+            let errorType = "Unknown";
+            if (error.message.includes("429")) errorType = "Quota Exceeded";
+            if (error.message.includes("fetch")) errorType = "Network Error";
+
+            console.warn(`[AI-DEBUG] Model ${modelName} failed. Reason: ${errorType}. Details:`, error.message);
+            console.warn(`[AI-DEBUG] Model ${modelName} failed. Reason: ${errorType}. Details:`, error.message);
+            lastError += `[${modelName}: ${error.message}] `;
             // Proceed to next model
         }
     }
 
-    // Fallback if ALL clouds fail
-    return getLocalResponse(userMessage, context);
+    console.error("[AI-DEBUG] All Online Models failed. Switching to Offline Mode.");
+
+    // DIAGNOSTIC FALLBACK: Show error to user to help debug
+    const localRes = getLocalResponse(userMessage, context);
+    return `${localRes}\n\n⚠️ **AI Connection Failed**\nDebug Info: \`${lastError}\`\nPlease check your internet connection or API Key permissions.`;
 }

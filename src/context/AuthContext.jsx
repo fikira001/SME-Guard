@@ -86,9 +86,14 @@ export function AuthProvider({ children }) {
         };
     }, []);
 
+    function updateLocalUserData(newData) {
+        setUserData(prev => ({ ...prev, ...newData }));
+    }
+
     const value = {
         currentUser,
         userData,
+        updateLocalUserData, // Exposed for optimistic updates
         signup,
         login,
         logout

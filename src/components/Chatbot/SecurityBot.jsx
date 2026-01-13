@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Loader2 } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { useAuth } from '../../context/AuthContext';
 import { chatWithSecurityBot } from '../../services/aiService';
@@ -16,6 +16,7 @@ export default function SecurityBot() {
     const [isThinking, setIsThinking] = useState(false);
     const messagesEndRef = useRef(null);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -74,11 +75,31 @@ export default function SecurityBot() {
                     <div className="bg-green-600 p-4 flex justify-between items-center text-white">
                         <div className="flex items-center gap-2">
                             <Bot className="w-6 h-6" />
-                            <span className="font-bold">Security Assistant (AI)</span>
+                            <span className="font-bold">Security Assistant</span>
                         </div>
-                        <button onClick={() => setIsOpen(false)} className="hover:bg-green-700 p-1 rounded">
-                            <X className="w-5 h-5" />
-                        </button>
+                        <div className="flex gap-2">
+                            {messages.length > 2 && (
+                                <button
+                                    onClick={() => {
+                                        setIsOpen(false);
+                                        // Pass specific history to quiz
+                                        const chatHistory = messages
+                                            .filter(m => m.id !== 1) // Remove welcome message
+                                            .map(m => `${m.sender.toUpperCase()}: ${m.text}`)
+                                            .join('\n\n');
+
+                                        navigate('/chat-quiz', { state: { chatHistory } });
+                                    }}
+                                    className="bg-white/20 hover:bg-white/30 text-white text-xs px-2 py-1 rounded"
+                                    title="Generate Quiz from this conversation"
+                                >
+                                    Take Quiz
+                                </button>
+                            )}
+                            <button onClick={() => setIsOpen(false)} className="hover:bg-green-700 p-1 rounded">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Messages */}

@@ -8,6 +8,7 @@ import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
 import ModulesPage from './pages/ModulesPage';
 import ModuleDetailPage from './pages/ModuleDetailPage';
+import ChatQuizPage from './pages/ChatQuizPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import ResourcesPage from './pages/ResourcesPage';
 
@@ -44,6 +45,11 @@ function AppRoutes() {
           <Route path="/modules/:id" element={
             <ProtectedRoute>
               <ModuleDetailPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/chat-quiz" element={
+            <ProtectedRoute>
+              <ChatQuizPage />
             </ProtectedRoute>
           } />
           <Route path="/leaderboard" element={

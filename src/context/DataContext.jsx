@@ -11,20 +11,27 @@ export function useData() {
 }
 
 export function DataProvider({ children }) {
-    const { currentUser, userData } = useAuth();
+    const { currentUser, userData, updateLocalUserData } = useAuth();
     const [modules, setModules] = useState(MODULES_DATA || []);
 
     async function completeModule(moduleId, xpEarned) {
         if (!currentUser) return;
 
-        // Update local state is handled by AuthContext's userData usually, 
-        // but we can optimistically update or wait for real-time listener.
-        // For now, we'll just write to Firestore.
+        // Check if already completed to avoid double counting
+        if (userData?.completedModules?.includes(moduleId)) return;
+
+        // --- OPTIMISTIC UPDATE START ---
+        // Immediately reflect changes in UI (Dashboard, Header, etc)
+        const newXP = (userData?.xp || 0) + xpEarned;
+        const newModules = [...(userData?.completedModules || []), moduleId];
+
+        updateLocalUserData({
+            xp: newXP,
+            completedModules: newModules
+        });
+        // --- OPTIMISTIC UPDATE END ---
 
         const userRef = doc(db, "users", currentUser.uid);
-
-        // Check if already completed to avoid double counting if called incorrectly
-        if (userData?.completedModules?.includes(moduleId)) return;
 
         try {
             await updateDoc(userRef, {
@@ -34,9 +41,8 @@ export function DataProvider({ children }) {
         } catch (error) {
             console.error("Error updating module completion:", error);
             if (error.code === 'permission-denied') {
-                console.warn("Firestore Write Failed (Permission Denied). XP not saved remotely.");
-                // Note: We cannot force update local state here easily without 
-                // exposing a setter from AuthContext. For now, we log it.
+                console.warn("Firestore Write Failed (Permission Denied). XP will revert on refresh.");
+                // We keep the local state so the user SESSION feels good.
             }
         }
     }

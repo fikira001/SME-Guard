@@ -1,7 +1,7 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = process.env.VITE_GEMINI_API_KEY;
+const API_KEY = "AIzaSyDz_Fs7_mHflcCVUGsfBUe-IBo_hbcsSrs";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 async function check(name) {

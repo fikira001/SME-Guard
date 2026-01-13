@@ -21,15 +21,11 @@ export default function LeaderboardPage() {
             setLeaders(fetchedLeaders);
             setLoading(false);
         }, (error) => {
-            console.error("Error fetching leaderboard:", error);
-            // Fallback to mock data if Firestore fails or is empty
-            setLeaders([
-                { name: "Lagos Tech Hub", xp: 1200, businessName: "Lagos Tech Hub" },
-                { name: "Kano Textiles Ltd", xp: 850, businessName: "Kano Textiles Ltd" },
-                { name: "Abuja Logistics", xp: 720, businessName: "Abuja Logistics" },
-                { name: "Benin Agro Allied", xp: 600, businessName: "Benin Agro Allied" },
-                { name: "Delta Oil Services", xp: 550, businessName: "Delta Oil Services" },
-            ]);
+            console.error("Leaderboard Error:", error);
+            // Fallback: If network/perm error, show just the current user if available
+            if (userData) {
+                setLeaders([userData]);
+            }
             setLoading(false);
         });
 

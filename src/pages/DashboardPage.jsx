@@ -17,7 +17,7 @@ export default function DashboardPage() {
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 min-h-[80vh]">
             {/* Welcome Banner */}
-            <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 mb-8 text-white relative overflow-hidden shadow-xl">
+            <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 mb-8 text-white relative overflow-hidden shadow-xl animate-fade-in-up">
                 <div className="relative z-10">
                     <h1 className="text-3xl font-bold mb-2">Welcome back, {userData?.name?.split(' ')[0]}! 👋</h1>
                     <p className="text-slate-300 mb-6 max-w-2xl">
@@ -40,7 +40,7 @@ export default function DashboardPage() {
             {/* Stats Grid */}
             {/* Gamification Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                <div className="lg:col-span-2 space-y-6">
+                <div className="lg:col-span-2 space-y-6 animate-fade-in-up delay-100">
                     <LevelProgress xp={userData?.xp || 0} />
 
                     {/* Quick Stats */}
@@ -62,7 +62,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-1 animate-fade-in-up delay-200">
                     <BadgeList userData={userData || {}} />
                 </div>
             </div>
@@ -73,15 +73,16 @@ export default function DashboardPage() {
                 <Link to="/modules" className="text-green-600 dark:text-green-400 font-medium hover:underline">View All</Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in-up delay-300">
                 {modules.slice(0, 3).map(module => (
-                    <Link key={module.id} to={`/modules/${module.id}`} className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition cursor-pointer group">
-                        <div className="mb-4">{module.icon}</div>
-                        <h3 className="font-bold text-slate-800 dark:text-white mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition">{module.title}</h3>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{module.description}</p>
+                    <Link key={module.id} to={`/modules/${module.id}`} className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer group relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                        <div className="mb-4 relative z-10 transform group-hover:scale-110 transition duration-300">{module.icon}</div>
+                        <h3 className="font-bold text-slate-800 dark:text-white mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition relative z-10">{module.title}</h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 relative z-10">{module.description}</p>
                     </Link>
                 ))}
             </div>
-        </div>
+        </div >
     );
 }
