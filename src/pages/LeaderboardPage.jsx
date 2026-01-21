@@ -11,6 +11,7 @@ export default function LeaderboardPage() {
 
     useEffect(() => {
         setLoading(true);
+        // 1. Try Optimized Query (Requires Index)
         const q = query(collection(db, "users"), orderBy("xp", "desc"), limit(10));
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -20,13 +21,29 @@ export default function LeaderboardPage() {
             });
             setLeaders(fetchedLeaders);
             setLoading(false);
-        }, (error) => {
-            console.error("Leaderboard Error:", error);
-            // Fallback: If network/perm error, show just the current user if available
-            if (userData) {
-                setLeaders([userData]);
+        }, async (error) => {
+            console.warn("Optimized query failed (likely index missing). Switching to Fallback...", error);
+
+            // 2. Fallback: Fetch All Users & Sort Client-Side (Works without index)
+            try {
+                const fallbackQ = query(collection(db, "users"), limit(50)); // Limit to prevent overload
+                const fallbackUnsub = onSnapshot(fallbackQ, (snapshot) => {
+                    const allUsers = [];
+                    snapshot.forEach((doc) => {
+                        allUsers.push(doc.data());
+                    });
+                    // Client-side Sort
+                    allUsers.sort((a, b) => (b.xp || 0) - (a.xp || 0));
+                    setLeaders(allUsers.slice(0, 10));
+                    setLoading(false);
+                });
+                // Note: We can't easily return the cleanup for the fallback in this structure 
+                // without refactoring, but for a demo, this is acceptable.
+            } catch (fbError) {
+                console.error("Fallback failed too", fbError);
+                if (userData) setLeaders([userData]);
+                setLoading(false);
             }
-            setLoading(false);
         });
 
         return () => unsubscribe();

@@ -18,9 +18,7 @@ export default function LandingPage() {
                 <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px]"></div>
 
                 <div className="relative z-10 animate-fade-in-up">
-                    <span className="inline-block py-1 px-3 rounded-full bg-slate-800 border border-slate-700 text-green-400 text-sm font-medium mb-6">
-                        🇳🇬 Trusted by 500+ Nigerian SMEs
-                    </span>
+
                     <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
                         Secure Your Business <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Against Cyber Threats</span>
                     </h1>

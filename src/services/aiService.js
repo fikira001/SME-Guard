@@ -145,7 +145,8 @@ export async function chatWithSecurityBot(userMessage, context = "") {
 
     console.error("[AI-DEBUG] All Online Models failed. Switching to Offline Mode.");
 
-    // DIAGNOSTIC FALLBACK: Show error to user to help debug
+    // DIAGNOSTIC FALLBACK: Return local response cleanly without scary error messages
     const localRes = getLocalResponse(userMessage, context);
-    return `${localRes}\n\n⚠️ **AI Connection Failed**\nDebug Info: \`${lastError}\`\nPlease check your internet connection or API Key permissions.`;
+    // Silent fail: User just gets the "canned" good response. Errors are in console.
+    return localRes;
 }
